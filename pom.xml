@@ -1,0 +1,34 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.evan</groupId>
+  <artifactId>AppServer</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
+  <name>AppServer</name>
+  
+  <properties>
+      <groupId>com.evan</groupId>
+      <modelVersion>1.0.0</modelVersion>
+      <junitVersion>4.11</junitVersion>
+      <servletVersion>2.5</servletVersion>
+      <dbcpVersion>6.0.37</dbcpVersion>
+      <mysqlVersion>5.1.26</mysqlVersion>
+      <hibernateVersion>4.2.7.Final</hibernateVersion>
+      <strutsVersion>2.3.15.3</strutsVersion>
+      <springVersion>3.2.4.RELEASE</springVersion>
+      <log4jVersion>1.2.17</log4jVersion>
+      <tilesVersion>3.0.1</tilesVersion>
+      <poiVersion>3.1-FINAL</poiVersion>
+      <slf4jVersion>1.5.8</slf4jVersion>
+      <atomikosVersion>3.9.0</atomikosVersion>
+  </properties>
+  <modules>
+    <module>AppCommon</module>
+  	<module>AppService</module>
+  	<module>AppServiceImpl</module>
+  	<module>AppDao</module>
+  	<module>AppDaoImpl</module>
+  	<module>AppWeb</module>
+  	<module>AppPO</module>
+  </modules>
+</project>
