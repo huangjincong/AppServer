@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"  
+    xsi:schemaLocation="  
+http://www.springframework.org/schema/beans   
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd  
+http://www.springframework.org/schema/context   
+http://www.springframework.org/schema/context/spring-context-3.0.xsd  
+http://www.springframework.org/schema/aop  
+http://www.springframework.org/schema/aop/spring-aop-3.0.xsd  
+http://www.springframework.org/schema/tx  
+http://www.springframework.org/schema/tx/spring-tx-3.0.xsd  
+"> 
+	<context:component-scan base-package="com.evan"/>
+	
+	<bean id="dataSource1" class="com.atomikos.jdbc.AtomikosDataSourceBean">
+		<property name="uniqueResourceName">
+		    <value>db1</value>
+		</property>
+		<property name="xaDataSourceClassName">
+		    <value>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</value>
+		</property>
+		<property name="xaProperties">  
+	        <props>  
+	            <prop key="user">root</prop>  
+	            <prop key="password">123456</prop>  
+	            <prop key="URL">jdbc:mysql://localhost:3306/evan2</prop>  
+	        </props>  
+	    </property> 
+		<property name="poolSize" value="2" />  
+	    <property name="minPoolSize" value="1" />  
+	    <property name="maxPoolSize" value="5" />  
+	    <property name="testQuery" value="select 1" /> 
+	</bean>
+	
+	<bean id="sessionFactory1"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource1" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>  
+                <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>  
+                <prop key="hibernate.cache.use_query_cache">false</prop>  
+                <prop key="hibernate.jdbc.batch_size">50</prop>  
+                <prop key="hibernate.cache.use_second_level_cache">false</prop>
+			</props>
+		</property>
+		<property name="packagesToScan">
+			<list>
+				<value>com.evan1.app.po</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="dataSource2" class="com.atomikos.jdbc.AtomikosDataSourceBean">
+		<property name="uniqueResourceName">
+		    <value>db2</value>
+		</property>
+		<property name="xaDataSourceClassName">
+		    <value>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</value>
+		</property>
+		<property name="xaProperties">  
+	        <props>  
+	            <prop key="user">root</prop>  
+	            <prop key="password">123456</prop>  
+	            <prop key="URL">jdbc:mysql://localhost:3306/evan2</prop>  
+	        </props>  
+	    </property> 
+		<property name="poolSize" value="2" />  
+	    <property name="minPoolSize" value="1" />  
+	    <property name="maxPoolSize" value="5" />  
+	    <property name="testQuery" value="select 1" /> 
+	</bean>
+	
+	<bean id="sessionFactory2"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource2" />
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>  
+                <prop key="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</prop>  
+                <prop key="hibernate.cache.use_query_cache">false</prop>  
+                <prop key="hibernate.jdbc.batch_size">50</prop>  
+                <prop key="hibernate.cache.use_second_level_cache">false</prop>
+			</props>
+		</property>
+		<property name="packagesToScan">
+			<list>
+				<value>com.evan2.app.po</value>
+			</list>
+		</property>
+	</bean>
+	
+	<bean id="atomikosTransactionManager" class="com.atomikos.icatch.jta.UserTransactionManager" init-method="init" destroy-method="close"> 
+  		<property name="forceShutdown"><value>true</value></property> 
+	</bean>
+	
+	<bean id="atomikosUserTransaction" class="com.atomikos.icatch.jta.UserTransactionImp"> 
+  		<property name="transactionTimeout"><value>300</value></property> 
+	</bean> 
+	
+	<bean id="txManager"
+		class="org.springframework.transaction.jta.JtaTransactionManager">
+		<property name="transactionManager" ref="atomikosTransactionManager" />
+		<property name="userTransaction" ref="atomikosUserTransaction" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="txManager" />	
+</beans>
